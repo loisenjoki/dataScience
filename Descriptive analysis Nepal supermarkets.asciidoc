@@ -1,0 +1,320 @@
+Questiions: What is the median what is the mode the variance and
+standard deviation to measure central location Gender Frequency
+Supermarket branches mode of payments unit price of products
+
+
++*In[44]:*+
+[source, ipython3]
+----
+import pandas as pd
+
+df = pd.read_csv("/home/luisa/Documents/alliance4ai/supermarket_sales.csv")
+df.head(20)
+----
+
+
++*Out[44]:*+
+----
+[cols=",,,,,,,,,,,,,,,,",options="header",]
+|=======================================================================
+| |invoice_id |branch |customer_type |gender |product_line |unit_price
+|quantity |tax_5_perc |total |date |time |payment |cost_of_goods_sold
+|gross_margin_percentage |gross_income |rating
+|0 |750-67-8428 |A |Member |Female |Health and beauty |74.69 |7 |26.1415
+|548.9715 |1/5/2019 |13:08 |Mobile Money |522.83 |4.761905 |26.1415 |9.1
+
+|1 |226-31-3081 |C |Normal |Female |Electronic accessories |15.28 |5
+|3.8200 |80.2200 |3/8/2019 |10:29 |Cash |76.40 |4.761905 |3.8200 |9.6
+
+|2 |631-41-3108 |A |Normal |Male |Home and lifestyle |46.33 |7 |16.2155
+|340.5255 |3/3/2019 |13:23 |Debit card |324.31 |4.761905 |16.2155 |7.4
+
+|3 |123-19-1176 |A |Member |Male |Health and beauty |58.22 |8 |23.2880
+|489.0480 |1/27/2019 |20:33 |Mobile Money |465.76 |4.761905 |23.2880
+|8.4
+
+|4 |373-73-7910 |A |Normal |Male |Sports and travel |86.31 |7 |30.2085
+|634.3785 |2/8/2019 |10:37 |Mobile Money |604.17 |4.761905 |30.2085 |5.3
+
+|5 |699-14-3026 |C |Normal |Male |Electronic accessories |85.39 |7
+|29.8865 |627.6165 |3/25/2019 |18:30 |Mobile Money |597.73 |4.761905
+|29.8865 |4.1
+
+|6 |355-53-5943 |A |Member |Female |Electronic accessories |68.84 |6
+|20.6520 |433.6920 |2/25/2019 |14:36 |Mobile Money |413.04 |4.761905
+|20.6520 |5.8
+
+|7 |315-22-5665 |C |Normal |Female |Home and lifestyle |73.56 |10
+|36.7800 |772.3800 |2/24/2019 |11:38 |Mobile Money |735.60 |4.761905
+|36.7800 |8.0
+
+|8 |665-32-9167 |A |Member |Female |Health and beauty |36.26 |2 |3.6260
+|76.1460 |1/10/2019 |17:15 |Debit card |72.52 |4.761905 |3.6260 |7.2
+
+|9 |692-92-5582 |B |Member |Female |Food and beverages |54.84 |3 |8.2260
+|172.7460 |2/20/2019 |13:27 |Debit card |164.52 |4.761905 |8.2260 |5.9
+
+|10 |351-62-0822 |B |Member |Female |Fashion accessories |14.48 |4
+|2.8960 |60.8160 |2/6/2019 |18:07 |Mobile Money |57.92 |4.761905 |2.8960
+|4.5
+
+|11 |529-56-3974 |B |Member |Male |Electronic accessories |25.51 |4
+|5.1020 |107.1420 |3/9/2019 |17:03 |Cash |102.04 |4.761905 |5.1020 |6.8
+
+|12 |365-64-0515 |A |Normal |Female |Electronic accessories |46.95 |5
+|11.7375 |246.4875 |2/12/2019 |10:25 |Mobile Money |234.75 |4.761905
+|11.7375 |7.1
+
+|13 |252-56-2699 |A |Normal |Male |Food and beverages |43.19 |10
+|21.5950 |453.4950 |2/7/2019 |16:48 |Mobile Money |431.90 |4.761905
+|21.5950 |8.2
+
+|14 |829-34-3910 |A |Normal |Female |Health and beauty |71.38 |10
+|35.6900 |749.4900 |3/29/2019 |19:21 |Cash |713.80 |4.761905 |35.6900
+|5.7
+
+|15 |299-46-1805 |B |Member |Female |Sports and travel |93.72 |6
+|28.1160 |590.4360 |1/15/2019 |16:19 |Cash |562.32 |4.761905 |28.1160
+|4.5
+
+|16 |656-95-9349 |A |Member |Female |Health and beauty |68.93 |7
+|24.1255 |506.6355 |3/11/2019 |11:03 |Debit card |482.51 |4.761905
+|24.1255 |4.6
+
+|17 |765-26-6951 |A |Normal |Male |Sports and travel |72.61 |6 |21.7830
+|457.4430 |1/1/2019 |10:39 |Debit card |435.66 |4.761905 |21.7830 |6.9
+
+|18 |329-62-1586 |A |Normal |Male |Food and beverages |54.67 |3 |8.2005
+|172.2105 |1/21/2019 |18:00 |Debit card |164.01 |4.761905 |8.2005 |8.6
+
+|19 |319-50-3348 |B |Normal |Female |Home and lifestyle |40.30 |2
+|4.0300 |84.6300 |3/11/2019 |15:30 |Mobile Money |80.60 |4.761905
+|4.0300 |4.4
+|=======================================================================
+----
+
+
++*In[45]:*+
+[source, ipython3]
+----
+df.info()
+----
+
+
++*Out[45]:*+
+----
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 1000 entries, 0 to 999
+Data columns (total 16 columns):
+ #   Column                   Non-Null Count  Dtype  
+---  ------                   --------------  -----  
+ 0   invoice_id               1000 non-null   object 
+ 1   branch                   1000 non-null   object 
+ 2   customer_type            1000 non-null   object 
+ 3   gender                   1000 non-null   object 
+ 4   product_line             1000 non-null   object 
+ 5   unit_price               1000 non-null   float64
+ 6   quantity                 1000 non-null   int64  
+ 7   tax_5_perc               1000 non-null   float64
+ 8   total                    1000 non-null   float64
+ 9   date                     1000 non-null   object 
+ 10  time                     1000 non-null   object 
+ 11  payment                  1000 non-null   object 
+ 12  cost_of_goods_sold       1000 non-null   float64
+ 13  gross_margin_percentage  1000 non-null   float64
+ 14  gross_income             1000 non-null   float64
+ 15  rating                   1000 non-null   float64
+dtypes: float64(7), int64(1), object(8)
+memory usage: 125.1+ KB
+----
+
+
++*In[46]:*+
+[source, ipython3]
+----
+#average of total amout that customers spend in the supermakets
+average = df['total'].mean()
+print(average)
+#median
+med = df['total'].median()
+print(med)
+----
+
+
++*Out[46]:*+
+----
+322.96674900000005
+253.848
+----
+
+
++*In[47]:*+
+[source, ipython3]
+----
+standardDeviation = df["total"].std()
+print(standardDeviation)
+----
+
+
++*Out[47]:*+
+----
+245.88533510097207
+----
+
+
++*In[48]:*+
+[source, ipython3]
+----
+import seaborn as sns
+
+----
+
+
++*In[49]:*+
+[source, ipython3]
+----
+sns.countplot(df['branch']);
+
+----
+
+
++*Out[49]:*+
+----
+![png](output_6_0.png)
+----
+
+
++*In[50]:*+
+[source, ipython3]
+----
+from matplotlib import pyplot as plt
+
+%matplotlib inline
+fig=plt.figure()
+fx=fig.add_axes([0,0,1,1])
+fx.hist(df['gender'])
+fx.set_xlabel("Gender occurency")
+fx.set_ylabel("Frequency")
+fx.set_xticks([0.0,1.0])
+fx.set_xticklabels(['Male','Female'])
+plt.tick_params(axis="x",direction="out",length=4,width=2,pad=10,labelsize=10,labelbottom=True,labelrotation=30);
+----
+
+
++*Out[50]:*+
+----
+![png](output_7_0.png)
+----
+
+
++*In[51]:*+
+[source, ipython3]
+----
+#customer type
+fig=plt.figure()
+fx=fig.add_axes([0,0,1,1])
+fx.hist(df['customer_type'])
+fx.set_xlabel("Customer type")
+fx.set_ylabel("Frequency")
+fx.set_xticks([0.0,1.0])
+fx.set_xticklabels(['Member','Normal'])
+plt.tick_params(axis="x",direction="out",length=4,width=2,pad=10,labelsize=10,labelbottom=True,labelrotation=30);
+
+----
+
+
++*Out[51]:*+
+----
+![png](output_8_0.png)
+----
+
+
++*In[52]:*+
+[source, ipython3]
+----
+filter_data = df.dropna(subset=['unit_price'])
+plt.figure(figsize=(14,8))
+sns.distplot(filter_data['unit_price'], kde=True)
+----
+
+
++*Out[52]:*+
+----<matplotlib.axes._subplots.AxesSubplot at 0x7ff53ddd5190>
+![png](output_9_1.png)
+----
+
+
++*In[53]:*+
+[source, ipython3]
+----
+#mode of payment
+df['payment'].unique()
+
+
+----
+
+
++*Out[53]:*+
+----array(['Mobile Money', 'Cash', 'Debit card'], dtype=object)----
+
+
++*In[54]:*+
+[source, ipython3]
+----
+type_counts = df['payment'].value_counts()
+df2 = pd.DataFrame(
+                    {'modeofpayment': type_counts}, 
+                   index = ['Mobile Money', 'Cash', 'Debit card']
+                  )
+df2.plot.pie(y='modeofpayment', figsize=(10,10), autopct='%1.1f%%')
+----
+
+
++*Out[54]:*+
+----<matplotlib.axes._subplots.AxesSubplot at 0x7ff53de9ef40>
+![png](output_11_1.png)
+----
+
+
++*In[55]:*+
+[source, ipython3]
+----
+#products sold in the supermarkets
+sns.set(style='darkgrid')
+plt.figure(figsize=(20,10))
+ax = sns.countplot(x='product_line', data=df)
+----
+
+
++*Out[55]:*+
+----
+![png](output_12_0.png)
+----
+
+
++*In[ ]:*+
+[source, ipython3]
+----
+
+----
+
+
++*In[ ]:*+
+[source, ipython3]
+----
+
+----
+
+
++*In[ ]:*+
+[source, ipython3]
+----
+
+----
+
+
++*In[ ]:*+
+[source, ipython3]
+----
+
+----
